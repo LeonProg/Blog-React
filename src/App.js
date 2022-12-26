@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import TokenContext from './context/TokenContext';
+import { PublicRoutes, PrivateRoutes } from './routes';
 
 function App() {
+  const [token, setToken] = useState('')
+  const [isAuth, setIsAuth] = useState(false)
+
+  // Переделать
+  function saveLocal() {
+    setToken(localStorage.getItem('token'))
+    setIsAuth(true)
+  }
+
+  React.useEffect(() => {
+    if (localStorage.getItem('token')) {
+      saveLocal()
+    }
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TokenContext.Provider value={{token, setToken, isAuth, setIsAuth}}>
+      <div className="App">
+        {isAuth && <PrivateRoutes />}
+        <PublicRoutes />
+      </div>
+    </TokenContext.Provider>
   );
 }
 
