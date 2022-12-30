@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { toDate } from '../utils/toDate';
 
-const Post = ({id,title, description, name}) => {
+const Post = ({id,title, description, name, created_at}) => {
   return (
     <article className="post">
       <header>
@@ -12,7 +13,7 @@ const Post = ({id,title, description, name}) => {
         </div>
         <div className="meta">
           <time className="published" dateTime="2015-11-01">
-            November 1, 2015
+            {toDate(created_at)}
           </time>
           <span className="name">{name}</span>
         </div>
@@ -26,14 +27,7 @@ const Post = ({id,title, description, name}) => {
       <footer>
         <ul className="actions">
           <li>
-            <a href="post.html" className="button large">
-              Continue Reading
-            </a>
-          </li>
-        </ul>
-        <ul className="stats">
-          <li>
-            <button style={{ color: '#a00' }}>Remove</button>
+            <Link className="button large" to={`posts/${id}`}>Continue Reading</Link>
           </li>
         </ul>
       </footer>

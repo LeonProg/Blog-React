@@ -2,10 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import PostService from '../services/PostService';
+import { toDate } from '../utils/toDate';
 
 const PostPage = () => {
   const { id } = useParams();
   const [post, setPost] = React.useState({})
+  
   const fetchPost = async () => {
     const response = await PostService.getPost(id);
     setPost(response.data.data);
@@ -14,7 +16,6 @@ const PostPage = () => {
   React.useEffect(() => {
     try {
       fetchPost();
-      console.log(post)
     } catch (e) {
       console.log(e);
     }
@@ -33,7 +34,7 @@ const PostPage = () => {
             </div>
             <div className="meta">
               <time className="published" dateTime="2015-11-01">
-                November 1, 2015
+                {toDate(post.created_at)}
               </time>
               <span className="name">{post.name}</span>
             </div>

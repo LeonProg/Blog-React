@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TokenContext from './context/TokenContext';
 import { PublicRoutes, PrivateRoutes } from './routes';
 
+
 function App() {
   const [token, setToken] = useState('')
   const [isAuth, setIsAuth] = useState(false)
@@ -12,6 +13,12 @@ function App() {
     setIsAuth(true)
   }
 
+  function removeLocal() {
+    setIsAuth(false)
+    setToken('')
+    localStorage.removeItem('token')
+  }
+
   React.useEffect(() => {
     if (localStorage.getItem('token')) {
       saveLocal()
@@ -19,7 +26,7 @@ function App() {
   })
 
   return (
-    <TokenContext.Provider value={{token, setToken, isAuth, setIsAuth}}>
+    <TokenContext.Provider value={{token, setToken, isAuth, setIsAuth, removeLocal}}>
       <div className="App">
         {isAuth && <PrivateRoutes />}
         <PublicRoutes />

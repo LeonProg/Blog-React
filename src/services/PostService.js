@@ -7,4 +7,8 @@ export default class PostService {
   static getPost(id) {
     return $api.get(`/posts/${id}`)
   }
+
+  static createPost(data) {
+    return $api.post('/posts', data)
+  }
 }

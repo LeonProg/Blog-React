@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import AuthService from '../services/AuthService';
+import FormInput from '../components/Input'
+import { toFormData } from '../utils/toFormData';
 
 const RegistrationPage = () => {
   const navigate = useNavigate()
@@ -13,16 +15,17 @@ const RegistrationPage = () => {
     re_password: '',
   });
 
+  const onChangeHandle = (e) => setForm({...form, [e.target.name]: [e.target.value]})
+
   const registration = async(e) => {
     e.preventDefault()
     try {
-      const response = await AuthService.registration(form.name, form.email, form.password, form.re_password)
+      const response = await AuthService.registration(toFormData(form))
       console.log(response)
       navigate('/login')
     } catch (e) {
       console.log(e)
     }
-
   }
 
   return (
@@ -32,43 +35,18 @@ const RegistrationPage = () => {
         <article className="post">
           <h1>Registration</h1>
           <form action="#">
-            <label htmlFor="formname">Введите логин</label>
-            <input
-              id="formname"
-              type="text"
-              placeholder="Имя"
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              value={form.name}
-            />
-            <br />
-            <label htmlFor="formEmail">Введите почту</label>
-            <input
-              id="formEmail"
-              type="text"
-              placeholder="Электронная почта"
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              value={form.email}
-            />{' '}
-            <span>Error message</span>
-            <br />
-            <label htmlFor="formPassword">Введите пароль</label>
-            <input
-              id="formPassword"
-              type="text"
-              placeholder="Пароль"
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              value={form.password}
-            />
-            <br />
-            <label htmlFor="formRePassword">Повторить пароль</label>
-            <input
-              id="formRePassword"
-              type="text"
-              placeholder="Повторить пароль"
-              onChange={(e) => setForm({ ...form, re_password: e.target.value })}
-              value={form.re_password}
-            />
-            <br />
+            {
+              Object.keys(form).map((key, index) => 
+                <FormInput
+                  key={key}
+                  value={form.key}
+                  name={key}
+                  inputId={`${key}_${index}`}
+                  placeholder={key} 
+                  onChange={(e) => onChangeHandle(e)}
+                />
+              )
+            }          
             <button onClick={registration}>Регистрация</button>
           </form>
         </article>

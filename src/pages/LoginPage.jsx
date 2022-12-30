@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import index from '../components/Input';
 import TokenContext from '../context/TokenContext';
 import AuthService from '../services/AuthService';
+import FormInput from '../components/Input'
+import { toFormData } from '../utils/toFormData';
 
 const LoginPage = () => {
   const nagivate = useNavigate()
@@ -13,10 +16,12 @@ const LoginPage = () => {
   })
   const {setToken, setIsAuth} = React.useContext(TokenContext)
 
+  const onChangeHandle = (e) => setForm({...form, [e.target.name] : [e.target.value]}) 
+
   const login = async (e) => {
     e.preventDefault()
     try {
-      const response = await AuthService.login(form.email, form.password)
+      const response = await AuthService.login(toFormData(form))
       localStorage.setItem('token', response.data.token)
       setToken(response.data.token)
       setIsAuth(true)
@@ -34,19 +39,14 @@ const LoginPage = () => {
         <article className="post">
           <h1>Login</h1>
           <form>
-            <label htmlFor="formEmail">Your email</label>
-            <input
-              id="formEmail"
-              type="text"
-              placeholder="Your email"
-              onChange={(e) => setForm({...form, email: e.target.value})}
-              value={form.email}
-            />
-            <span>Error message</span>
-            <br />
-            <label htmlFor="formPassword">Your password</label>
-            <input id="formPassword" type="text" placeholder="Your password" onChange={(e) => setForm({...form, password: e.target.value})} value={form.password}/>
-            <br />
+            {Object.keys(form).map((key, index) => <FormInput
+              key={key}
+              value={form.key}
+              name={key}
+              inputId={`${key}_${index}`}
+              onChange={e => onChangeHandle(e)}
+              placeholder={key}
+            />)}
             <button onClick={login}>Вход</button>
           </form>
         </article>

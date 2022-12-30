@@ -1,17 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TokenContext from '../context/TokenContext';
 import AuthService from '../services/AuthService';
 import { CREATE_ROUTE, HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/Route';
 
 const Header = () => {
-  const { isAuth, setIsAuth, setToken } = React.useContext(TokenContext);
+  const { isAuth, removeLocal } = React.useContext(TokenContext);
+  const navigator = useNavigate();
 
   const logout = () => {
     AuthService.logout()
-    setIsAuth(false)
-    setToken('')
-    localStorage.removeItem('token')
+    removeLocal()
+
+    navigator('/')
   } 
 
   return (

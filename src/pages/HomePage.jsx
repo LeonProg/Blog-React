@@ -21,6 +21,7 @@ const HomePage = () => {
       console.log(e);
     }
   }, []);
+
   return (
     <div id="wrapper">
       <Header />
